@@ -57,6 +57,6 @@ resource "azurerm_sql_database" "sp_dummy_app" {
 resource "azurerm_mssql_firewall_rule" "sp_dummy_app" {
   name             = "Allow local dev for stef"
   server_id        = azurerm_mssql_server.sp_dummy_app.id
-  start_ip_address = "81.78.108.1"
-  end_ip_address   = "82.78.108.1"
+  start_ip_address = data.http.local_ip[0].response_body
+  end_ip_address   = data.http.local_ip[0].response_body
 }
