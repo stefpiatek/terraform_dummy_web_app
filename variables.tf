@@ -35,3 +35,9 @@ variable "sql_password" {
   type = string
   sensitive = true
 }
+
+variable "gh_token" {
+  description = "Personal access token for github"
+  type = string
+  sensitive = true
+}

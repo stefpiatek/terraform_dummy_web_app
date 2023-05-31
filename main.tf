@@ -67,18 +67,32 @@ resource "azurerm_linux_web_app" "sp_dummy_app" {
   location            = azurerm_service_plan.sp_dummy_app.location
   service_plan_id     = azurerm_service_plan.sp_dummy_app.id
   https_only = true
-
+  logs {
+    application_logs {
+      file_system_level = "Verbose"
+    }
+    http_logs {
+        file_system {
+          retention_in_days = 10
+          retention_in_mb   = 25
+        }
+      }
+  }
   site_config {
-    app_command_line = "python manage.py runserver"
+    app_command_line = "python django/dummy/manage.py makemigrations && python django/dummy/manage.py migrate && python django/dummy/manage.py runserver"
     application_stack {
           python_version = "3.11"
         }
   }
 }
 
+
+resource "azurerm_source_control_token" "sp_dummy_app" {
+  type  = "GitHub"
+  token = var.gh_token
+}
+
 resource "azurerm_app_service_source_control" "sp_dummy_app" {
   app_id = azurerm_linux_web_app.sp_dummy_app.id
-  repo_url = "https://github.com/stefpiatek/terraform_dummy_web_app"
-  branch = "main"
   use_local_git = true
 }
