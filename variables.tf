@@ -41,3 +41,10 @@ variable "gh_token" {
   type = string
   sensitive = true
 }
+
+variable "django_secret" {
+  description = "Secret for django"
+  type = string
+  sensitive = true
+}
+
