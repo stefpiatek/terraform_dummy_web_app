@@ -86,7 +86,7 @@ resource "azurerm_linux_web_app" "sp_dummy_app" {
   }
 }
 
-
+# was complaining here that there was no github token even when using local git, but wonder if there was some stale state?
 resource "azurerm_source_control_token" "sp_dummy_app" {
   type  = "GitHub"
   token = var.gh_token
@@ -95,4 +95,25 @@ resource "azurerm_source_control_token" "sp_dummy_app" {
 resource "azurerm_app_service_source_control" "sp_dummy_app" {
   app_id = azurerm_linux_web_app.sp_dummy_app.id
   use_local_git = true
+}
+
+# Allow access to the webapp
+resource "azurerm_network_security_group" "sp_dummy_app" {
+  name                = "example-nsg"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_network_security_rule" "sp_dummy_app" {
+  name                        = "allow-http"
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "80"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.rg.name
+  network_security_group_name = azurerm_network_security_group.sp_dummy_app.name
 }
