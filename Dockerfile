@@ -26,4 +26,5 @@ RUN pip install -r /app/requirements.txt
 COPY django /app
 
 # Make migrations and run the app
-CMD python /app/dummy/manage.py makemigrations && python /app/dummy/manage.py migrate && python /app/dummy/manage.py runserver 0.0.0.0:8000
+WORKDIR /app/dummy/
+CMD python manage.py makemigrations && python manage.py migrate && python manage.py loaddata initial_data && python manage.py runserver 0.0.0.0:8000

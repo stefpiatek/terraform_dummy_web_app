@@ -124,3 +124,10 @@ resource "azurerm_source_control_token" "sp_dummy_app" {
   type  = "GitHub"
   token = var.gh_token
 }
+
+# Allow access to the webapp
+resource "azurerm_network_security_group" "sp_dummy_app" {
+  name                = "example-nsg"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}

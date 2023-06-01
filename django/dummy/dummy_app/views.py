@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+from .models import Person
+
+def index(request):
+    people = Person.objects.all()
+    return render(request, 'index.html', {"people": people})
