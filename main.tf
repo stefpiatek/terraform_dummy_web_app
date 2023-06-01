@@ -86,6 +86,10 @@ resource "azurerm_linux_web_app" "sp_dummy_app" {
   }
   app_settings = {
     "DJANGO_SECRET_KEY" = var.django_secret,
+    "DB_NAME" = azurerm_mssql_server.sp_dummy_app.name,
+    "DB_USER" = azurerm_mssql_server.sp_dummy_app.administrator_login,
+    "DB_PASSWORD" = azurerm_mssql_server.sp_dummy_app.administrator_login_password,
+    "DB_HOST" = azurerm_mssql_server.sp_dummy_app.fully_qualified_domain_name,
   }
 }
 
