@@ -79,9 +79,9 @@ resource "azurerm_linux_web_app" "sp_dummy_app" {
       }
   }
   site_config {
-    app_command_line = "python django/dummy/manage.py makemigrations && python django/dummy/manage.py migrate && python django/dummy/manage.py runserver"
     application_stack {
-          python_version = "3.11"
+          docker_image = "docker.io/stefpiatek/sp_dummy_app"
+          docker_image_tag = "latest"
         }
   }
   app_settings = {
@@ -93,11 +93,6 @@ resource "azurerm_linux_web_app" "sp_dummy_app" {
 resource "azurerm_source_control_token" "sp_dummy_app" {
   type  = "GitHub"
   token = var.gh_token
-}
-
-resource "azurerm_app_service_source_control" "sp_dummy_app" {
-  app_id = azurerm_linux_web_app.sp_dummy_app.id
-  use_local_git = true
 }
 
 # Allow access to the webapp
