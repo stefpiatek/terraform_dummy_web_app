@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") if os.getenv("IN_PRODUCTION") else "LocalDevelopmentKey"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -75,9 +75,13 @@ WSGI_APPLICATION = "dummy.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# settings.py
-DATABASES = {
-    "default": {
+default_db = {
+    "ENGINE": "django.db.backends.sqlite3",
+    "NAME": BASE_DIR / "db.sqlite3",
+}
+    
+if os.getenv("IN_PRODUCTION"):
+    default_db = {
         "ENGINE": "mssql",
         "NAME": os.getenv("DB_NAME"),
         "USER": os.getenv("DB_USER"),
@@ -85,8 +89,12 @@ DATABASES = {
         "HOST": os.getenv("DB_HOST"),
         "PORT": "1433",
         "OPTIONS": {"driver": "ODBC Driver 18 for SQL Server", 
-        },
-    },
+        }
+    }
+
+# settings.py
+DATABASES = {
+    "default": default_db,
 }
 
 # Password validation
