@@ -27,7 +27,7 @@ jobs:
         with:
           file: Dockerfile
           push: true
-          tags: stefpiatek/terraform_dummy_web_app:latest
+          tags: stefpiatek/sp_dummy_app:latest
           # cache build steps for faster building
-          cache-from: type=registry,ref=stefpiatek/terraform_dummy_web_app:buildcache
-          cache-to: type=registry,ref=stefpiatek/terraform_dummy_web_app:buildcache,mode=max
+          cache-from: type=registry,ref=stefpiatek/sp_dummy_app:buildcache
+          cache-to: type=registry,ref=stefpiatek/sp_dummy_app:buildcache,mode=max
